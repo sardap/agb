@@ -1,3 +1,1 @@
-
-
-- [ ] Changelog updated / no changelog update needed
+- [ ] Change(log) updated / no changelog update needed

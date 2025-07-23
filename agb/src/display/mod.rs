@@ -75,7 +75,7 @@ pub use colours::{Rgb, Rgb15, include_colours};
 pub use palette16::Palette16;
 
 /// Graphics mode 3. Bitmap mode that provides a 16-bit colour framebuffer.
-pub(crate) mod bitmap3;
+pub mod bitmap3;
 mod colours;
 pub mod object;
 /// Palette type.

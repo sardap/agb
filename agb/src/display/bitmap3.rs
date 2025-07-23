@@ -9,12 +9,12 @@ const BITMAP_MODE_3: MemoryMapped2DArray<u16, { WIDTH as usize }, { HEIGHT as us
     unsafe { MemoryMapped2DArray::new(0x600_0000) };
 
 #[non_exhaustive]
-pub(crate) struct Bitmap3<'gba> {
+pub struct Bitmap3<'gba> {
     phantom: PhantomData<&'gba ()>,
 }
 
 impl Bitmap3<'_> {
-    pub(crate) unsafe fn new() -> Self {
+    pub unsafe fn new() -> Self {
         let mut current_graphics = DisplayControlRegister::default();
         current_graphics.set_video_mode(u3::new(3));
         current_graphics.set_enabled_backgrounds(u4::new(1u8 << 2));

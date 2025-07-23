@@ -248,6 +248,9 @@ pub use agb_image_converter::include_colours_inner;
 #[doc(hidden)]
 pub use agb_image_converter::include_aseprite_256_inner;
 
+#[doc(hidden)]
+pub use display::bitmap3::Bitmap3;
+
 #[macro_export]
 /// Includes a ttf font to be usable by dynamic font rendering.
 ///
