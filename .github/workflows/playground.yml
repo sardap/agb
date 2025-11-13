@@ -14,11 +14,15 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: extractions/setup-just@v3
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
       - name: Checkout examples from the latest released agb
         run: git restore --source $(git describe --tags --abbrev=0) agb/examples
+      - name: Set template to use nightly of latest release
+        run: |
+          NIGHTLY=$(./.github/scripts/nightly-of-last-release.sh)
+          sed "s/\bnightly\b/&-${NIGHTLY}/" -i template/rust-toolchain.toml
       - name: Build image
         run: just build-playground-image
       - name: Save image
@@ -33,7 +37,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: extractions/setup-just@v3
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
       - name: Build image
@@ -54,11 +58,11 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Download playground builder
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: playground-builder
       - name: Download playground server
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: playground-server
       - name: Import images
@@ -93,7 +97,7 @@ jobs:
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
       - name: Deploy

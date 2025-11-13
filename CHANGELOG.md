@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.22.6] - 2025/10/29
+
+### Added
+
+- New `embassy` feature to support `embassy-agb`. You should only use this feature with the library.
+
+## [0.22.5] - 2025/08/27
+
+### Fixed
+
+- Fixed an issue using nightly versions newer than `2025-08-12`.
+
 ## [0.22.4] - 2025/07/15
 
 ### Fixed

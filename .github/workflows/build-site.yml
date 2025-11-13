@@ -30,15 +30,26 @@ jobs:
             ~/.cargo/git
             ~/target
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
       - name: Build screenshot generator
         run: cd emulator/screenshot-generator && cargo build --release
       - name: Checkout latest release
-        run: cp justfile ../justfile && git switch --detach $(git describe --tags --abbrev=0) && mv ../justfile justfile
+        id: checkout
+        run: |
+          NIGHTLY_VERSION=$(./.github/scripts/nightly-of-last-release.sh)
+          LATEST_RELEASE_TAG=$(git describe --tags --abbrev=0)
+
+          echo "toolchain=nightly-$NIGHTLY_VERSION" > "$GITHUB_OUTPUT"
+
+          cp justfile ../justfile && git switch --detach "$LATEST_RELEASE_TAG" && mv ../justfile justfile
       - name: Prepare web dependencies
-        run: just package-site-dependencies
+        run: |
+          rustup component add rust-src rustfmt clippy
+          just package-site-dependencies
+        env:
+          RUSTUP_TOOLCHAIN: ${{ steps.checkout.outputs.toolchain }}
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
@@ -53,11 +64,11 @@ jobs:
         run: echo "CARGO_TARGET_DIR=$HOME/target" >> $GITHUB_ENV
       - name: Install build tools
         run: sudo apt-get update && sudo apt-get install build-essential libelf-dev zip -y
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
       - name: Download site dependencies
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: site-deps
           path: target/
@@ -77,7 +88,7 @@ jobs:
       - name: Build website
         run: just podman_command=docker _build-site-ci
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: "website/build"
   deploy:
